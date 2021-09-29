@@ -1,0 +1,16 @@
+.mainContainer {
+  width: 400px;
+  justify-content: center;
+  align-items: center;
+  background-color: cadetblue;
+  padding-top: 1%;
+}
+
+.numbersContainer {
+  display: flex;
+  justify-content: space-evenly;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}

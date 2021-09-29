@@ -1,0 +1,9 @@
+.leftRightContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.resetContainer {
+  display: flex;
+  justify-content: center;
+}

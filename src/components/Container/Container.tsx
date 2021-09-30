@@ -8,7 +8,7 @@ import styles from "./Container.module.css";
 
 const Container = () => {
   const [visibleNumbers, setVisibleNumbers] = useState<never | number[]>([]);
-
+  const [intervalId, setIntervalId] = useState<any>();
   const savedCallback: any = useRef();
 
   useEffect(() => {
@@ -32,14 +32,12 @@ const Container = () => {
   };
 
   const leftButtonClickHandler = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
     setVisibleNumbers([3]);
-    setInterval(callback, 1000);
-    // const t = setInterval(setTest, 1000);
-    // clearInterval(t);
-    // Liczba 3 ma się pojawić
-    // Po 1 sekundzie liczba 3 ma zniknąć a pojawić ma się liczba 2
-    // Po 1 sekundzie liczba 2 ma zniknąć a pojawić ma się liczba 1
-    // Po 1 sekundzie liczba 1 ma zniknąć i pojawić mają się wszystkie 3 liczby
+    let id = setInterval(callback, 1000);
+    setIntervalId(id);
   };
 
   const rightButtonClickHandler = () => {};

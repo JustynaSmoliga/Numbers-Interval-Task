@@ -1,13 +1,20 @@
 import styles from "./Buttons.module.css";
-const Buttons = () => {
+
+interface ButtonsProps {
+  handleLeftButtonClick: () => void;
+  handleRightButtonClick: () => void;
+  handleResetButtonClick: () => void;
+}
+
+const Buttons: React.FC<ButtonsProps> = (props) => {
   return (
     <div>
       <div className={styles.leftRightContainer}>
-        <button>w lewo</button>
-        <button>w prawo</button>
+        <button onClick={props.handleLeftButtonClick}>w lewo</button>
+        <button onClick={props.handleRightButtonClick}>w prawo</button>
       </div>
       <div className={styles.resetContainer}>
-        <button>reset</button>
+        <button onClick={props.handleResetButtonClick}>reset</button>
       </div>
     </div>
   );

@@ -1,8 +1,9 @@
 .mainContainer {
   width: 400px;
+  height: 120px;
   justify-content: center;
   align-items: center;
-  background-color: cadetblue;
+  background-color: rgb(121, 164, 165);
   padding-top: 1%;
 }
 

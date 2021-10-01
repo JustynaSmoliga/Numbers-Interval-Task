@@ -3,24 +3,39 @@ import Buttons from "../Buttons/Buttons";
 import NumberOne from "../NumberOne/NumberOne";
 import NumberThree from "../NumberThree/NumberThree";
 import NumberTwo from "../NumberTwo/NumberTwo";
-import EmptyDiv from "../EmptyDiv/EmptyDiv";
 import styles from "./Container.module.css";
 
 const Container = () => {
-  const [visibleNumbers, setVisibleNumbers] = useState<never | number[]>([]);
-  const [intervalId, setIntervalId] = useState<any>();
-  const savedCallback: any = useRef();
-  const savedDescendingCallback: any = useRef();
+  const [visibleNumbers, setVisibleNumbers] = useState<number[]>([]);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+  const savedDescendingCallback = useRef<() => void>(setNumbersDescending);
+  const savedAscendingCallback = useRef<() => void>(setNumbersAscending);
 
   useEffect(() => {
-    savedCallback.current = setNumbersDescending;
+    savedDescendingCallback.current = setNumbersDescending;
+    savedAscendingCallback.current = setNumbersAscending;
   });
 
-  useEffect(() => {
-    savedDescendingCallback.current = setNumbersAscending;
-  });
+  const leftButtonClickHandler = () => {
+    resetInterval();
+    setVisibleNumbers([3]);
+    const id = setInterval(descendingCallback, 1000);
+    setIntervalId(id);
+  };
 
-  const setNumbersDescending = () => {
+  const rightButtonClickHandler = () => {
+    resetInterval();
+    setVisibleNumbers([1]);
+    const id = setInterval(ascendingCallback, 1000);
+    setIntervalId(id);
+  };
+
+  const resetButtonClickHandler = () => {
+    setVisibleNumbers([]);
+    resetInterval();
+  };
+
+  function setNumbersDescending() {
     if (visibleNumbers.includes(3)) {
       setVisibleNumbers([2]);
     }
@@ -29,10 +44,11 @@ const Container = () => {
     }
     if (visibleNumbers.includes(1)) {
       setVisibleNumbers([1, 2, 3]);
+      resetInterval();
     }
-  };
+  }
 
-  const setNumbersAscending = () => {
+  function setNumbersAscending() {
     if (visibleNumbers.includes(1)) {
       setVisibleNumbers([2]);
     }
@@ -41,35 +57,23 @@ const Container = () => {
     }
     if (visibleNumbers.includes(3)) {
       setVisibleNumbers([1, 2, 3]);
+      resetInterval();
     }
-  };
+  }
 
-  const callback = () => {
-    savedCallback.current();
-  };
+  function resetInterval() {
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+  }
 
   const descendingCallback = () => {
     savedDescendingCallback.current();
   };
 
-  const leftButtonClickHandler = () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-    }
-    setVisibleNumbers([3]);
-    let id = setInterval(callback, 1000);
-    setIntervalId(id);
+  const ascendingCallback = () => {
+    savedAscendingCallback.current();
   };
-
-  const rightButtonClickHandler = () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-    }
-    setVisibleNumbers([1]);
-    let id = setInterval(descendingCallback, 1000);
-    setIntervalId(id);
-  };
-  const resetButtonClickHandler = () => {};
 
   return (
     <div className={styles.mainContainer}>
@@ -79,9 +83,9 @@ const Container = () => {
         handleResetButtonClick={resetButtonClickHandler}
       />
       <div className={styles.numbersContainer}>
-        {visibleNumbers.includes(1) ? <NumberOne /> : <EmptyDiv />}
-        {visibleNumbers.includes(2) ? <NumberTwo /> : <EmptyDiv />}
-        {visibleNumbers.includes(3) ? <NumberThree /> : <EmptyDiv />}
+        {visibleNumbers.includes(1) ? <NumberOne /> : <div />}
+        {visibleNumbers.includes(2) ? <NumberTwo /> : <div />}
+        {visibleNumbers.includes(3) ? <NumberThree /> : <div />}
       </div>
     </div>
   );

@@ -10,12 +10,17 @@ const Container = () => {
   const [visibleNumbers, setVisibleNumbers] = useState<never | number[]>([]);
   const [intervalId, setIntervalId] = useState<any>();
   const savedCallback: any = useRef();
+  const savedDescendingCallback: any = useRef();
 
   useEffect(() => {
-    savedCallback.current = setNumbers;
+    savedCallback.current = setNumbersDescending;
   });
 
-  const setNumbers = () => {
+  useEffect(() => {
+    savedDescendingCallback.current = setNumbersAscending;
+  });
+
+  const setNumbersDescending = () => {
     if (visibleNumbers.includes(3)) {
       setVisibleNumbers([2]);
     }
@@ -27,8 +32,24 @@ const Container = () => {
     }
   };
 
+  const setNumbersAscending = () => {
+    if (visibleNumbers.includes(1)) {
+      setVisibleNumbers([2]);
+    }
+    if (visibleNumbers.includes(2)) {
+      setVisibleNumbers([3]);
+    }
+    if (visibleNumbers.includes(3)) {
+      setVisibleNumbers([1, 2, 3]);
+    }
+  };
+
   const callback = () => {
     savedCallback.current();
+  };
+
+  const descendingCallback = () => {
+    savedDescendingCallback.current();
   };
 
   const leftButtonClickHandler = () => {
@@ -40,7 +61,14 @@ const Container = () => {
     setIntervalId(id);
   };
 
-  const rightButtonClickHandler = () => {};
+  const rightButtonClickHandler = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+    setVisibleNumbers([1]);
+    let id = setInterval(descendingCallback, 1000);
+    setIntervalId(id);
+  };
   const resetButtonClickHandler = () => {};
 
   return (
